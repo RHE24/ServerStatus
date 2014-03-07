@@ -1,0 +1,562 @@
+<!--                                                                                                                                -->
+<!-- /$$   /$$           /$$                                                   /$$$$$$$$             /$$     /$$   /$$              -->
+<!--| $$  | $$          | $$                                                  | $$_____/            | $$    |__/  | $$              -->
+<!--| $$  | $$ /$$$$$$$ | $$   /$$ /$$$$$$$   /$$$$$$  /$$  /$$  /$$ /$$$$$$$ | $$       /$$$$$$$  /$$$$$$   /$$ /$$$$$$   /$$   /$$-->
+<!--| $$  | $$| $$__  $$| $$  /$$/| $$__  $$ /$$__  $$| $$ | $$ | $$| $$__  $$| $$$$$   | $$__  $$|_  $$_/  | $$|_  $$_/  | $$  | $$-->
+<!--| $$  | $$| $$  \ $$| $$$$$$/ | $$  \ $$| $$  \ $$| $$ | $$ | $$| $$  \ $$| $$__/   | $$  \ $$  | $$    | $$  | $$    | $$  | $$-->
+<!--| $$  | $$| $$  | $$| $$_  $$ | $$  | $$| $$  | $$| $$ | $$ | $$| $$  | $$| $$      | $$  | $$  | $$ /$$| $$  | $$ /$$| $$  | $$-->
+<!--|  $$$$$$/| $$  | $$| $$ \  $$| $$  | $$|  $$$$$$/|  $$$$$/$$$$/| $$  | $$| $$$$$$$$| $$  | $$  |  $$$$/| $$  |  $$$$/|  $$$$$$$-->
+<!-- \______/ |__/  |__/|__/  \__/|__/  |__/ \______/  \_____/\___/ |__/  |__/|________/|__/  |__/   \___/  |__/   \___/   \____  $$-->
+<!--                                                                                                                       /$$  | $$-->
+<!--                                                                                                                      |  $$$$$$/-->
+<!--                                                                                                                       \______/ -->
+<!--                                                                                                                                -->
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/s/61ipbn8yebeiejz/bootstrap2.css">
+<script src="https://dl.dropboxusercontent.com/s/3jlhvuskgq8molj/bootstrap.js"></script>
+<div id="mainserver">
+	<div id="submainserv">
+
+		<div id="well2" class="well">
+		</div>
+		<img id="img" src="http://placehold.it/212x158&text=Server+Logo.">
+		<div id="well1" class="well">
+		</div>
+
+		<div>
+			<div>
+				<hboot3>
+					<span id="serveriplabel" class="label label-danger"></span>
+					<span id="onlineplayers" class="label label-danger">online players</span>
+				</hboot3>
+			</div>
+
+			<div id="imagediv">
+				<span id="0"></span>
+				<img id="1">
+				<img id="2">
+				<img id="3">
+				<img id="4">
+				<br>
+				<img id="5">
+				<img id="6">
+				<img id="7">
+				<img id="8">
+				<br>
+				<img id="9">
+				<img id="10">
+				<img id="11">
+				<img id="12">
+			</div>
+		</div>
+		<div class="progress progress-striped active">
+			<div class="progress-bar progress-bar-danger" id="barwidth" role="progressbar">
+				<span id="bartext" style="color:black"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var xhr = new XMLHttpRequest();
+	var xhr2 = new XMLHttpRequest();
+	var ip = "mc.example.com"
+	//var serverip = "mc.example.com"; 
+	//Uncomment line above and change ip to server ip below if you want to display a different ip on the module
+	document.getElementById("serveriplabel").innerHTML = ip;
+
+	var a = document.getElementById("serveriplabel").offsetWidth;
+	var b = document.getElementById("well2").offsetWidth;
+	var c = b - a;
+	var d = c / 2;
+	var e = d + "px";
+	document.getElementById("serveriplabel").style.left = e;
+
+	xhr.open("GET", "http://minecraft-api.com/v1/get/?server=" + ip, true);
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			data = JSON.parse(xhr.responseText);
+			var players = new String(data.players.online);
+			var ratio = 100 / data.players.max;
+			var playersratio = players * ratio;
+			var max = new String(data.players.max);
+			var online = new String(players + "/" + max);
+			if (data.status) {
+				document.getElementById("bartext").innerHTML = online;
+				document.getElementById("barwidth").style.width = playersratio + "%";
+			} else document.getElementById("bartext").innerHTML = "The server is offline!";
+			var playersratio = "100";
+			document.getElementById("serveriplabel").title = data.motd;
+			if (data.players.online == 0) {
+				document.getElementById("0").innerHTML = "Server is empty!";
+			}
+		}
+	}
+	xhr.send();
+
+	xhr2.open("GET", "http://minecraft-api.com/v1/players/?server=" + ip, true);
+
+	xhr2.onreadystatechange = function() {
+		if (xhr2.readyState == 4) {
+			data = JSON.parse(xhr2.responseText);
+			if (data.players.length == 1) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+			}
+			if (data.players.length == 2) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+			}
+			if (data.players.length == 3) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+			}
+			if (data.players.length == 4) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+			}
+			if (data.players.length == 5) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+			}
+			if (data.players.length == 6) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+			}
+			if (data.players.length == 7) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+				var avatar7 = data.players.slice(6, 7);
+				var aurl7 = "http://minecraft-api.com/v1/avatar/?player=" + avatar7 + "&size=50&helmet=true";
+				document.getElementById("7").src = aurl7;
+				document.getElementById("7").title = avatar7;
+			}
+			if (data.players.length == 8) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+				var avatar7 = data.players.slice(6, 7);
+				var aurl7 = "http://minecraft-api.com/v1/avatar/?player=" + avatar7 + "&size=50&helmet=true";
+				document.getElementById("7").src = aurl7;
+				document.getElementById("7").title = avatar7;
+				var avatar8 = data.players.slice(7, 8);
+				var aurl8 = "http://minecraft-api.com/v1/avatar/?player=" + avatar8 + "&size=50&helmet=true";
+				document.getElementById("8").src = aurl8;
+				document.getElementById("8").title = avatar8;
+			}
+			if (data.players.length == 9) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+				var avatar7 = data.players.slice(6, 7);
+				var aurl7 = "http://minecraft-api.com/v1/avatar/?player=" + avatar7 + "&size=50&helmet=true";
+				document.getElementById("7").src = aurl7;
+				document.getElementById("7").title = avatar7;
+				var avatar8 = data.players.slice(7, 8);
+				var aurl8 = "http://minecraft-api.com/v1/avatar/?player=" + avatar8 + "&size=50&helmet=true";
+				document.getElementById("8").src = aurl8;
+				document.getElementById("8").title = avatar8;
+				var avatar9 = data.players.slice(8, 9);
+				var aurl9 = "http://minecraft-api.com/v1/avatar/?player=" + avatar9 + "&size=50&helmet=true";
+				document.getElementById("9").src = aurl9;
+				document.getElementById("9").title = avatar9;
+			}
+			if (data.players.length == 10) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+				var avatar7 = data.players.slice(6, 7);
+				var aurl7 = "http://minecraft-api.com/v1/avatar/?player=" + avatar7 + "&size=50&helmet=true";
+				document.getElementById("7").src = aurl7;
+				document.getElementById("7").title = avatar7;
+				var avatar8 = data.players.slice(7, 8);
+				var aurl8 = "http://minecraft-api.com/v1/avatar/?player=" + avatar8 + "&size=50&helmet=true";
+				document.getElementById("8").src = aurl8;
+				document.getElementById("8").title = avatar8;
+				var avatar9 = data.players.slice(8, 9);
+				var aurl9 = "http://minecraft-api.com/v1/avatar/?player=" + avatar9 + "&size=50&helmet=true";
+				document.getElementById("9").src = aurl9;
+				document.getElementById("9").title = avatar9;
+				var avatar10 = data.players.slice(9, 10);
+				var aurl10 = "http://minecraft-api.com/v1/avatar/?player=" + avatar10 + "&size=50&helmet=true";
+				document.getElementById("10").src = aurl10;
+				document.getElementById("10").title = avatar10;
+			}
+			if (data.players.length == 11) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+				var avatar7 = data.players.slice(6, 7);
+				var aurl7 = "http://minecraft-api.com/v1/avatar/?player=" + avatar7 + "&size=50&helmet=true";
+				document.getElementById("7").src = aurl7;
+				document.getElementById("7").title = avatar7;
+				var avatar8 = data.players.slice(7, 8);
+				var aurl8 = "http://minecraft-api.com/v1/avatar/?player=" + avatar8 + "&size=50&helmet=true";
+				document.getElementById("8").src = aurl8;
+				document.getElementById("8").title = avatar8;
+				var avatar9 = data.players.slice(8, 9);
+				var aurl9 = "http://minecraft-api.com/v1/avatar/?player=" + avatar9 + "&size=50&helmet=true";
+				document.getElementById("9").src = aurl9;
+				document.getElementById("9").title = avatar9;
+				var avatar10 = data.players.slice(9, 10);
+				var aurl10 = "http://minecraft-api.com/v1/avatar/?player=" + avatar10 + "&size=50&helmet=true";
+				document.getElementById("10").src = aurl10;
+				document.getElementById("10").title = avatar10;
+				var avatar11 = data.players.slice(10, 11);
+				var aurl11 = "http://minecraft-api.com/v1/avatar/?player=" + avatar11 + "&size=50&helmet=true";
+				document.getElementById("11").src = aurl11;
+				document.getElementById("11").title = avatar11;
+			}
+			if (data.players.length >= 12) {
+				var avatar = data.players.slice(0, 1);
+				var aurl = "http://minecraft-api.com/v1/avatar/?player=" + avatar + "&size=50&helmet=true";
+				document.getElementById("1").src = aurl;
+				document.getElementById("1").title = avatar;
+				var avatar2 = data.players.slice(1, 2);
+				var aurl2 = "http://minecraft-api.com/v1/avatar/?player=" + avatar2 + "&size=50&helmet=true";
+				document.getElementById("2").src = aurl2;
+				document.getElementById("2").title = avatar2;
+				var avatar3 = data.players.slice(2, 3);
+				var aurl3 = "http://minecraft-api.com/v1/avatar/?player=" + avatar3 + "&size=50&helmet=true";
+				document.getElementById("3").src = aurl3;
+				document.getElementById("3").title = avatar3;
+				var avatar4 = data.players.slice(3, 4);
+				var aurl4 = "http://minecraft-api.com/v1/avatar/?player=" + avatar4 + "&size=50&helmet=true";
+				document.getElementById("4").src = aurl4;
+				document.getElementById("4").title = avatar4;
+				var avatar5 = data.players.slice(4, 5);
+				var aurl5 = "http://minecraft-api.com/v1/avatar/?player=" + avatar5 + "&size=50&helmet=true";
+				document.getElementById("5").src = aurl5;
+				document.getElementById("5").title = avatar5;
+				var avatar6 = data.players.slice(5, 6);
+				var aurl6 = "http://minecraft-api.com/v1/avatar/?player=" + avatar6 + "&size=50&helmet=true";
+				document.getElementById("6").src = aurl6;
+				document.getElementById("6").title = avatar6;
+				var avatar7 = data.players.slice(6, 7);
+				var aurl7 = "http://minecraft-api.com/v1/avatar/?player=" + avatar7 + "&size=50&helmet=true";
+				document.getElementById("7").src = aurl7;
+				document.getElementById("7").title = avatar7;
+				var avatar8 = data.players.slice(7, 8);
+				var aurl8 = "http://minecraft-api.com/v1/avatar/?player=" + avatar8 + "&size=50&helmet=true";
+				document.getElementById("8").src = aurl8;
+				document.getElementById("8").title = avatar8;
+				var avatar9 = data.players.slice(8, 9);
+				var aurl9 = "http://minecraft-api.com/v1/avatar/?player=" + avatar9 + "&size=50&helmet=true";
+				document.getElementById("9").src = aurl9;
+				document.getElementById("9").title = avatar9;
+				var avatar10 = data.players.slice(9, 10);
+				var aurl10 = "http://minecraft-api.com/v1/avatar/?player=" + avatar10 + "&size=50&helmet=true";
+				document.getElementById("10").src = aurl10;
+				document.getElementById("10").title = avatar10;
+				var avatar11 = data.players.slice(10, 11);
+				var aurl11 = "http://minecraft-api.com/v1/avatar/?player=" + avatar11 + "&size=50&helmet=true";
+				document.getElementById("11").src = aurl11;
+				document.getElementById("11").title = avatar11;
+				var avatar12 = data.players.slice(11, 12);
+				var aurl12 = "http://minecraft-api.com/v1/avatar/?player=" + avatar12 + "&size=50&helmet=true";
+				document.getElementById("12").src = aurl12;
+				document.getElementById("12").title = avatar12;
+			}
+		}
+	}
+	xhr2.send();
+</script>
+<style>
+	#mainserver {
+		position:static;
+		margin-left: 35px;
+		padding-bottom: 258px;
+	}
+	#submainserv {
+		position: relative;
+	}
+	span#onlineplayers.label.label-danger {
+		position: absolute;
+		left: 352px;
+		top: 40px;
+	}
+	span#serveriplabel.label.label-danger {
+		position: absolute;
+		<!--left: 176px;
+		--> top: 0px;
+	}
+	#\30 {
+		position: absolute;
+		left: 382px;
+		top: 137px;
+		color: #585858;
+	}
+	#\31 {
+		border-radius:5px;
+		position:absolute;
+		top: 71px;
+		left: 319px;
+	}
+	#\32 {
+		border-radius:5px;
+		position:absolute;
+		top: 71px;
+		left: 373px;
+	}
+	#\33 {
+		border-radius:5px;
+		position:absolute;
+		top: 71px;
+		left: 427px;
+	}
+	#\34 {
+		border-radius:5px;
+		position:absolute;
+		left: 481px;
+		top: 71px;
+	}
+	#\35 {
+		border-radius:5px;
+		position:absolute;
+		top: 125px;
+		left: 319px;
+	}
+	#\36 {
+		border-radius:5px;
+		position:absolute;
+		top: 125px;
+		left: 373px;
+	}
+	#\37 {
+		border-radius:5px;
+		position:absolute;
+		top: 125px;
+		left: 427px;
+	}
+	#\38 {
+		border-radius:5px;
+		position:absolute;
+		top: 125px;
+		left: 481px;
+	}
+	#\39 {
+		border-radius:5px;
+		position:absolute;
+		top: 179px;
+		left: 319px;
+	}
+	#\31 0 {
+		border-radius:5px;
+		position: absolute;
+		top: 179px;
+		left: 373px;
+	}
+	#\31 1 {
+		border-radius:5px;
+		position: absolute;
+		top: 179px;
+		left: 427px;
+	}
+	#\31 2 {
+		border-radius:5px;
+		position: absolute;
+		top: 179px;
+		left: 481px;
+	}
+	#submainserv > div.progress.progress-striped.active {
+		position:absolute;
+		top: 260px;
+		width: 556px;
+		left: 4px;
+	}
+	#well2 {
+		position: absolute;
+		width: 526px;
+		height: 238px;
+		top: 13px;
+	}
+	#img {
+		position: absolute;
+		top: 71px;
+		left: 36px;
+	}
+	#well1 {
+		position:absolute;
+		height: 152px;
+		width: 206px;
+		top: 50px;
+		left: 302px;
+	}
+</style>
